@@ -1,0 +1,369 @@
+Một số thông tin image, video. anh xem còn thiếu gì bổ sung thêm.
+- kích thươc:
+  + image: 
+    - kích thước file (example: 3mb)
+    - loại file
+    - ngày tạo file (ex: 04/20/2018)
+    - người tạo file
+    - thông tin cắt hình {cx, cy, cwidth, cheight}
+    - thông tin bộ loc (name, value) 
+    - đường dẫn hình gốc
+    - đường dẫn hình thumbnail (nếu hỗ trợ nhiều màn hình thì nên có nhiều thumbnail mobile và desktop, để sau này tối ưu load danh sách)
+    - nằm ở sever nào (ex: server01, server02)
+
+  + Video
+    - kích thước file (example: 3mb)
+    - thời gian video (ex: 5h30')
+    - loại file (ex: mp4, dat)
+    - ngày tạo file (ex: 04/20/2018)
+    - người tạo file
+    - đường dẫn video gốc
+    - đường dẫn hình thumbnail (nếu hỗ trợ nhiều màn hình thì nên có nhiều thumbnail mobile và desktop, để sau này tối ưu load danh sách)
+    - nằm ở sever nào (ex: server01, server02)
+	
+	Ghi chú:
+	pn100: ID user
+	pp100: ID page
+	---------------
+	frontend(parent)
+		- business
+			+ config
+				- constants.php
+					note: Định nghĩa các biến và các link api dùng chung cho module business. Còn cái nào không dùng chung nên để vào file config của từng forder modules bên dưới.
+			+ core
+				- MY_Controller.php
+					Note: Các phương thức điều khiển get data or check logic business cho module business.
+				- MY_Model.php
+					Note: Các phương thức get data từ api dùng chung.
+					+ Script_model.php
+						Note: Load thư viện java script dùng chung cho hệ thống business. Mà không có ở 
+						header của dự án. 
+					
+			+ modules
+				- home 
+					.config
+						+ constants.php 
+							note: Định nghĩa các biến và link api để thực hiện gọi api cho phần home.
+					.controller					
+						+ account(method) - Query param business_id
+							ex: business.hahalolo.com/home/account?business_id=187878787827
+							Note: Trang đầu tiên khi vào link business. Nếu chưa tạo business. Thì vào trang oveview để tạo business.
+							Khi bấm vào link "setting" thì mở tab mới.
+						+ overview(method)
+							ex:business.hahalolo.com/home/overview
+					.models
+					.views
+						+ overview.php
+							note: hiển thị trang overview nếu chưa tạo business
+						+ account.php
+							note: Hiển thị thông tin busienss đã được tạo.					
+				- setting
+					.config
+						+ constants.php 
+							note: Định nghĩa các biến và link api để thực hiện gọi api cho phần home.
+					.controller
+						+ people(method) - Query param (business_id=187878787827)
+							ex: business.hahalolo.com/setting/people?business_id=187878787827
+							- Link khi click vào danh sách user (people) ở cột phải
+							ex:business.hahalolo.com/setting/people/pn100?business_id=187878787827						
+							or:business.hahalolo.com/setting/people?business_id=187878787827&pn100=user_id
+						+ pages	(method) - Query param (business_id = 878787827878)
+							ex: business.hahalolo.com/setting/pages?business_id=187878787827
+							- Link khi click vào danh sách pages ở cột phải
+							ex: business.hahalolo.com/setting/pages/pp100?business_id=187878787827
+							or : business.hahalolo.com/setting/pages?business_id=187878787827&pp100=id_page
+						+ info (method) 
+							ex: business.hahalolo.com/setting/info?business_id=187878787827
+					.models
+					.views
+						+ info
+							- info.php
+						+ pages
+							- page.php
+						+ people
+							- people.php
+					
+		- tour
+			+ core
+			+ modules
+				- setting
+					.config
+					.Controller
+						+ Home.php
+							- general(method)
+							- notification(method)
+							- role(method)
+				- management
+					.config
+					.Controller
+						+ Tour.php
+							- index(method): Hiển thị danh sách quản lý Tour
+							ex: hahalolo.com/management/tour?pp100=11888787
+							- edit(method): Hiển thị page tour info 
+								+ Tab Infomation
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=info&pt100=7788
+								+ Tab Parts
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=part&pt100=7788
+								+ Tab Service
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=service&pt100=7788
+								+ Tab Prices
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=price&pt100=7788
+								+ Tab Likes
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=like&pt100=7788
+								+ Tab comments
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=comment&pt100=7788
+								+ Tab Reviews
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=review&pt100=7788
+								+ Tab Setting
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=setting&pt100=7788
+								+ Tab Promotions
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=promotion&pt100=7788
+								+ Tab Schedules
+								ex: hahalolo.com/management/tour/edit?pp100=11888787&tab=schedule&pt100=7788
+						+ Topic.php
+							- index(method): Hiển thi danh sách quản lý topic
+								ex: hahalolo.com/management/topic?pp100=11888787
+						+ Promotion.php
+							- index(method): Hiển thị danh sách quản lý promotion
+							ex: hahalolo.com/management/promotion?pp100=11888787
+							- detail(method): Hiển thi danh sách detail của 1 promotion
+							ex: hahalolo.com/management/promotion/detail?pp100=11888787
+							- edit(method) : Hiển thị promotion tạo mới & edit
+								.TH1: Create promotion & mode promotion = Simple
+								ex: hahalolo.com/management/promotion/edit?pp100=11888787&tab=create&m=sim&pt350=7788
+								.TH2: Create promotion & mode promotion = advance
+								ex: hahalolo.com/management/promotion/edit?pp100=11888787&tab=create&m=adv&pt350=7788
+								.TH3: Edit promotion& mode = simple
+								ex: hahalolo.com/management/promotion/edit?pp100=11888787&tab=edit&m=sim&pt350=7788
+								.TH4: Edit promotion & mode=advance
+								ex: hahalolo.com/management/promotion/edit?pp100=11888787&tab=edit&m=adv&pt350=7788
+						
+						+ Guide.php
+							- index(method): Hiển thị danh sách quản lý guide
+							+ Tab List
+							ex: hahalolo.com/management/guide?pp100=11888787&tab=list
+							+ Tab Request
+							ex: hahalolo.com/management/guide?pp100=11888787&tab=requ
+					.models
+					.views
+					
+				- sale
+					.config
+					.Controller
+						+ Program.php
+							- index (method): Hiển thị danh sách tour program
+								TH1: Nếu làm tab ( Ngĩa là load page Tour Program và Order Out Program = ajax)
+								+ Tab Tour Program
+								ex: hahalolo.com/management/program?pp100=11888787&tab=tour_program
+								+ Tab Order Out Program
+								ex: hahalolo.com/management/program?pp100=11888787&tab=order_out_program
+								TH2: Nếu tạo 2 page riêng biệt.
+								+ Tour Program
+									- index(method): Chính là phương thức index ở trên.
+									ex: hahalolo.com/management/program?pp100=11888787
+								+ Order Out Program
+									- tourorder(method)
+									ex: hahalolo.com/management/program/tourorder?pp100=11888787
+							- order(method): Danh sách order để chọn add vào program
+							ex: hahalolo.com/management/program/order?pp100=11888787&pt100=7788
+							- edit(method): Update thông tin cho program
+								+ Tab Program Info
+								ex: hahalolo.com/management/program/edit?pp100=11888787&pt850=7788999&tab=info
+								+ Tab Orders
+								ex: hahalolo.com/management/program/edit?pp100=11888787&pt850=7788999&tab=order
+								+ Tab Customer
+								ex: hahalolo.com/management/program/edit?pp100=11888787&pt850=7788999&tab=cust
+								+ Tab Guides
+								ex: hahalolo.com/management/program/edit?pp100=11888787&pt850=7788999&tab=guide
+						+ Order.php
+							- index(method): Danh sách order của page.
+							ex: hahalolo.com/management/order/?pp100=11888787
+							- detail(method): Chi tiết order
+								+ Tab General
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=general
+								+ Tab Payment
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=payment
+								+ Tab Price Detail Tour không ghép
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=price&t=n_mer
+								+ Tab price detail Tour ghép
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=price&t=y_mer
+								+ Tab Promotions:
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=promotion
+								+ Tab History
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=history
+								+ Tab Customer
+								ex: hahalolo.com/management/order/detail?pp100=11888787&po100=0909&tab=cust
+					.models
+					.views
+							
+		- hotel
+			+ core
+			+ modules
+		- shopping
+			+ core
+			+ modules
+		- oauth
+			+ core
+			+ modules
+		- user
+			+ core
+			+ modules
+		- newsfeed
+			+ core
+			+ modules
+		- pagewall
+			+ core
+				- MY_Controller.php
+				- MY_Model.php
+					script_general(method): Load javascript chung cho toàn bộ module - Nó không bao gồm header.
+					script_tour(method): Script chung cho tour
+					script_hotel(method): Script chung hotel
+					
+			+ modules
+				- pages
+					.config
+					.Controller
+						+ Timeline.php
+							- index(method): Hiển thị timetine của pages (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/timeline?pp100=7887&t=h001
+						+ Products.php
+							- index (method): Hiển thị danh sách product(Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/products?pp100=7887&t=h001
+							- detail(method): Hiển thị chi tiết của 1 product (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787
+							.TH1: Đối với Tour khi click link Tab
+								+ Tab Detail
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=det
+								+ Tab Description
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=des
+								+ Tab Privacy
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=pri
+								+ Tab Contacts
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=con
+								+ Tab Schedules
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=sche
+								+ Tab Reviews
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h001&pro_id=8787&tab=rev
+							. TH2: Đối với Hotel
+								+ Tab Detail
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=det
+								+ Tab Cancellation
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=can
+								+ Tab Privacy
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=pri
+								+ Tab Contacts
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=con
+								+ Tab Schedules
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=sche
+								+ Tab Review
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h003&pro_id=8787&tab=rev
+							. TH2: Đối với Shopping
+								+ Tab Attribute
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h004&pro_id=8787&tab=atr&loc=1 (loc: chính là vị thứ attribute)							
+								+ Tab Privacy
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h004&pro_id=8787&tab=pri
+								+ Tab Contacts
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h004&pro_id=8787&tab=con
+								+ Tab Review
+								ex: hahalolo.com/pages/products/detail?pp100=7887&t=h004&pro_id=8787&tab=rev
+							- booking(method)
+								.TH1: Đối với Tour (Tương tự cho Shopping and Hotel)
+									. Step1:
+									ex: hahalolo.com/pages/products/booking?pp100=7887&t=h001&pro_id=8787&step=info
+									. Step2:
+									ex: hahalolo.com/pages/products/booking?pp100=7887&t=h001&pro_id=8787&step=traveller&t=per(type personall hoặc group)
+									ex: hahalolo.com/pages/products/booking?pp100=7887&t=h001&pro_id=8787&step=traveller&t=gr (type personall hoặc group)
+									. Step3: 
+									ex: hahalolo.com/pages/products/booking?pp100=7887&t=h001&pro_id=8787&step=confirm
+									. Step4: 
+									ex: hahalolo.com/pages/products/booking?pp100=7887&t=h001&pro_id=8787&step=payment
+						+ Promotions.php
+							- index(method): Hiển thị danh sách khuyến mãi (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/promotions?pp100=7887&t=h001
+						+ About.php
+							- index(method): Hiển thị thông tin pages (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/about?pp100=7887&t=h001
+						+ Posts.php
+							- index(method): Hiển thị thông tin post (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/posts?pp100=7887&t=h001
+						+ Revews.php
+							- index(method): Hiển thị page reviews (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/reviews?pp100=7887&t=h001
+						+ Photos.php
+							- index(method): Hiển thị thông tin photo (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/photos?pp100=7887&t=h001
+						+ Videos.php
+						- index(method): Hiển thị thông tin video (Tour(h001)- Hotel(h003)-Shopping(h004)).
+							ex: hahalolo.com/pages/videos?pp100=7887&t=h001
+						+ Topics.php (Đối với Tour)
+						+ Programs.php(Đối với Tour)
+					.models
+					.views
+						+ tours
+							- timeline
+							- detail
+								+ inc (Dành cho các tab)
+							- booking
+								+ inc (Dành cho step)
+							- topics
+							- programs
+						+ hotels
+							- timeline
+							- detail
+							- booking
+						+ shops
+							- timeline
+							- detail
+							- booking
+						+ about
+							
+						+ photos
+						+ videos
+					
+		- peronalwall
+			+ config
+			+ core
+				- MY_Controller.php
+				- MY_Model.php
+			+ modules
+				- pages
+					+ Timeline.php
+						- index(method): Hiển thị timeline của 1 user (personal)
+						ex: hahalolo.com/pages/timeline?pn100=7887
+					+ About.php
+						- index(method): Hiển thị About của 1 user (personal)
+						ex: hahalolo.com/pages/about?pn100=7887
+					+ Friends.php
+						- index(method): Hiển thị Friends của 1 user (personal)
+						ex: hahalolo.com/pages/friends?pn100=7887
+					+ Photos.php
+						- index(method): Hiển thị Photos của 1 user (personal)
+						ex: hahalolo.com/pages/photos?pn100=7887
+					+ Videos.php
+						- index(method): Hiển thị Videos của 1 user (personal)
+						ex: hahalolo.com/pages/videos?pn100=7887
+					+ Likes.php
+						- index(method): Hiển thị Likes của 1 user (personal)
+						ex: hahalolo.com/pages/likes?pn100=7887
+					+ Reviews.php
+						- index(method): Hiển thị Reviews của 1 user (personal)
+						ex: hahalolo.com/pages/reviews?pn100=7887
+			+ models
+			+ views
+				- timeline
+				- about
+				- friends
+				- photos
+				- videos
+				- likes
+				- reviews
+					
+		- public
+		- templates
+		- system
+			+ share
+				- helpers
+				
+				- models
+					+ Share_Model.php
+				
